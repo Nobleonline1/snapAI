@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Comment Generator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>AI Comment Generator</h1>
+        <button id="logout-btn">Logout</button>
+
+        <div class="section">
+            <h2>1. Scan Text from Camera</h2>
+            <video id="camera-feed" autoplay playsinline></video>
+            <button id="start-camera-btn">Start Camera</button>
+            <button id="capture-photo-btn" disabled>Capture Photo</button>
+            <canvas id="camera-canvas" style="display:none;"></canvas>
+            <img id="captured-image-display" src="" alt="Captured Image" style="display:none; max-width: 100%; height: auto;">
+        </div>
+
+        <div class="section">
+            <h2>2. Upload an Image</h2>
+            <input type="file" id="upload-input" accept="image/*">
+            <img id="uploaded-image-display" src="" alt="Uploaded Image" style="display:none; max-width: 100%; height: auto;">
+        </div>
+
+        <div class="section">
+            <h2>3. Input Speech</h2>
+            <button id="start-speech-btn">Start Recording</button>
+            <button id="stop-speech-btn" disabled>Stop Recording</button>
+            <p id="speech-text-display">Speak into microphone...</p>
+        </div>
+
+        <div class="section">
+            <h2>4. Generate Comment</h2>
+            <button id="generate-comment-btn" disabled>Generate AI Comment</button>
+            <p id="comment-output-status"></p>
+            <textarea id="comment-output" rows="5" placeholder="Your AI-generated comment will appear here..." readonly></textarea>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
