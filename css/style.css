@@ -1,0 +1,222 @@
+/* ==========================================================
+   Global Styles & CSS Variables
+   These apply to the entire site and define a base aesthetic.
+   ========================================================== */
+
+:root {
+    /* Color Palette (you can customize these values) */
+    --primary-color: #007bff;        /* A strong blue, often for main actions, headings */
+    --secondary-color: #28a745;      /* A success green, for accents, links, success messages */
+    --text-color: #333;              /* Dark text for readability */
+    --text-light-color: #666;        /* Lighter text for secondary info, placeholders */
+    --background-color: #f8f9fa;     /* Light background for the overall page */
+    --card-bg: #fff;                 /* White background for containers/cards */
+    --border-color: #dee2e6;         /* Light grey for borders, input fields */
+    --error-color: #dc3545;          /* Red for error messages */
+    --success-color: #28a745;        /* Green for success messages */
+    --button-hover-bg: #0056b3;      /* Darker blue on primary button hover */
+    --link-hover-color: #0056b3;     /* Darker blue on link hover */
+
+    /* Shadows for depth */
+    --shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 6px 12px rgba(0, 0, 0, 0.15);
+
+    /* Typography */
+    --font-family-sans: 'Segoe UI', Roboto, Arial, sans-serif; /* Prioritize modern sans-serif fonts */
+    --font-size-base: 16px;
+    --line-height-base: 1.6;
+}
+
+/* Basic Reset & Box-Sizing for consistent layout */
+*, *::before, *::after {
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    margin: 0;   /* Remove default margins */
+    padding: 0;  /* Remove default paddings */
+}
+
+/* Body Styles - Base typography and layout for the whole page */
+body {
+    font-family: var(--font-family-sans);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    color: var(--text-color);
+    background-color: var(--background-color);
+    display: flex; /* Use Flexbox for easy vertical and horizontal centering of main content */
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    min-height: 100vh;       /* Make body take at least full viewport height */
+    margin: 0;
+    padding: 20px;           /* Add some padding around the edges for smaller screens */
+    overflow-x: hidden;      /* Prevent horizontal scrollbar issues */
+}
+
+/* General Button Styles (applies to all <button> elements by default) */
+button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600; /* Bolder text for buttons */
+    transition: background-color 0.2s ease, transform 0.1s ease; /* Smooth hover and active effects */
+    width: 100%; /* Make buttons full width inside forms for consistency */
+    margin-top: 20px; /* Space above buttons */
+}
+
+button:hover {
+    background-color: var(--button-hover-bg);
+    transform: translateY(-1px); /* Slight lift effect on hover */
+}
+
+button:active {
+    transform: translateY(0); /* "Press" effect on click */
+}
+
+button:disabled {
+    background-color: #cccccc; /* Grey out disabled buttons */
+    cursor: not-allowed;       /* Change cursor for disabled buttons */
+}
+
+/* General Container Styling (for main content areas on index.html etc.) */
+.container {
+    width: 100%;
+    max-width: 960px; /* Standard max-width for content, adjust as needed */
+    margin: 0 auto;   /* Center container horizontally */
+    padding: 20px;
+}
+
+
+* ==========================================================
+   Authentication Specific Styles (for signup.html & login.html)
+   ========================================================== */
+
+.auth-container {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: var(--shadow-light);
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    margin: 50px auto;
+    text-align: center;
+    border: 10px solid var(--border-color);
+}
+.auth-container h2 {
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+.auth-container p {
+    margin-top: 20px;
+    font-size: 0.95rem;
+    color: var(--text-light-color);
+}
+.auth-container a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.auth-container a:hover {
+    text-decoration: underline;
+    color: var(--link-hover-color);
+}
+
+/* --- Input Group Styling (Corrected Arrangement) --- */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+    /* Optional: Use flexbox if you ever want side-by-side labels/inputs
+       For now, we'll keep labels on top, but align them better */
+}
+.input-group label {
+    display: block; /* Keeps label above input */
+    margin-bottom: 8px; /* Space between label and input */
+    font-weight: 500;
+    color: var(--text-color);
+    font-size: 0.95rem;
+
+    /* --- IMPORTANT NEW/MODIFIED STYLES FOR ALIGNMENT --- */
+    /* Remove previous uppercase/letter spacing if you want them exactly like the image */
+    /* text-transform: uppercase; */
+    /* letter-spacing: 0.5px; */
+
+    /* Add padding to the label to match the input's internal starting point */
+    /* Input padding-left: 12px, border-left: 1px. So total 13px shift */
+    padding-left: calc(var(--font-size-base) * 0.75 + 1px); /* Dynamic padding based on font size or use 13px */
+    /* You can also just use a fixed value: padding-left: 13px; */
+    /* For better responsiveness, using a calc value based on font-size-base or a rem value is better: */
+    /* padding-left: 0.75rem; */
+}
+
+.input-group input[type="email"],
+.input-group input[type="password"],
+.input-group input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+    color: var(--text-color);
+    background-color: var(--card-bg);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+.input-group input:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Placeholder Styling */
+.input-group input::placeholder {
+    color: var(--text-light-color);
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Optional: Add a hover effect to input fields */
+.input-group input:hover:not(:focus) {
+    border-color: #a0aec0;
+}
+
+/* Message Styles - For dynamically displayed success/error messages */
+#auth-message {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    display: none;
+    box-shadow: var(--shadow-light);
+}
+
+.error-message {
+    color: var(--error-color);
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid var(--error-color);
+}
+.success-message {
+    color: var(--success-color);
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid var(--success-color);
+}
+
+/* ... (rest of your style.css like responsive adjustments and index.html specific styles) ... */
+Explanation of the Key Change:
+The most significant change for alignment is in the .input-group label rule:
+
+CSS
+
+.input-group label {
+    /* ... existing styles ... */
+
+    /* Add padding to the label to match the input's internal starting point */
+    /* Input has 12px padding-left and 1px border-left. So total 13px shift */
+    padding-left: calc(var(--font-size-base) * 0.75 + 1px); /* Approximately 12px + 1px */
+    /* Or a fixed value: padding-left: 13px; */
+}
