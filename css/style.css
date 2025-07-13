@@ -43,11 +43,11 @@ body {
     background-color: var(--background-color);
     display: flex; /* Use Flexbox for easy vertical and horizontal centering of main content */
     justify-content: center; /* Center horizontally */
-    align-items: center;     /* Center vertically */
-    min-height: 100vh;       /* Make body take at least full viewport height */
+    align-items: center;      /* Center vertically */
+    min-height: 100vh;        /* Make body take at least full viewport height */
     margin: 0;
-    padding: 20px;           /* Add some padding around the edges for smaller screens */
-    overflow-x: hidden;      /* Prevent horizontal scrollbar issues */
+    padding: 20px;            /* Add some padding around the edges for smaller screens */
+    overflow-x: hidden;       /* Prevent horizontal scrollbar issues */
 }
 
 /* General Button Styles (applies to all <button> elements by default) */
@@ -76,7 +76,7 @@ button:active {
 
 button:disabled {
     background-color: #cccccc; /* Grey out disabled buttons */
-    cursor: not-allowed;       /* Change cursor for disabled buttons */
+    cursor: not-allowed;        /* Change cursor for disabled buttons */
 }
 
 /* General Container Styling (for main content areas on index.html etc.) */
@@ -88,7 +88,7 @@ button:disabled {
 }
 
 
-* ==========================================================
+/* ==========================================================
    Authentication Specific Styles (for signup.html & login.html)
    ========================================================== */
 
@@ -127,8 +127,6 @@ button:disabled {
 .input-group {
     margin-bottom: 20px;
     text-align: left;
-    /* Optional: Use flexbox if you ever want side-by-side labels/inputs
-       For now, we'll keep labels on top, but align them better */
 }
 .input-group label {
     display: block; /* Keeps label above input */
@@ -137,17 +135,7 @@ button:disabled {
     color: var(--text-color);
     font-size: 0.95rem;
 
-    /* --- IMPORTANT NEW/MODIFIED STYLES FOR ALIGNMENT --- */
-    /* Remove previous uppercase/letter spacing if you want them exactly like the image */
-    /* text-transform: uppercase; */
-    /* letter-spacing: 0.5px; */
-
-    /* Add padding to the label to match the input's internal starting point */
-    /* Input padding-left: 12px, border-left: 1px. So total 13px shift */
-    padding-left: calc(var(--font-size-base) * 0.75 + 1px); /* Dynamic padding based on font size or use 13px */
-    /* You can also just use a fixed value: padding-left: 13px; */
-    /* For better responsiveness, using a calc value based on font-size-base or a rem value is better: */
-    /* padding-left: 0.75rem; */
+    padding-left: calc(var(--font-size-base) * 0.75 + 1px);
 }
 
 .input-group input[type="email"],
@@ -206,17 +194,31 @@ button:disabled {
     border: 1px solid var(--success-color);
 }
 
-/* ... (rest of your style.css like responsive adjustments and index.html specific styles) ... */
-Explanation of the Key Change:
-The most significant change for alignment is in the .input-group label rule:
-
-CSS
-
-.input-group label {
-    /* ... existing styles ... */
-
-    /* Add padding to the label to match the input's internal starting point */
-    /* Input has 12px padding-left and 1px border-left. So total 13px shift */
-    padding-left: calc(var(--font-size-base) * 0.75 + 1px); /* Approximately 12px + 1px */
-    /* Or a fixed value: padding-left: 13px; */
+/* ==========================================================
+   NEW: Resend Email Specific Styles
+   ========================================================== */
+.resend-link-container {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+.resend-link-container a {
+    text-decoration: underline;
+    font-weight: bold;
+}
+.resend-button {
+    /* Use a different style for the resend button to distinguish it */
+    background-color: var(--secondary-color);
+    margin-top: 10px;
+}
+.resend-button:hover {
+    background-color: #218838;
+}
+.message-area {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: var(--shadow-light);
 }
