@@ -21,6 +21,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const resendEmailButton = document.getElementById('resend-email-button');
     const resendMessageDisplay = document.getElementById('resend-message');
 
+    // NEW: Verification page elements
+    const verifyMessageDisplay = document.getElementById('verify-message');
+    const verifyTitle = document.getElementById('verify-title');
+    const loginLink = document.getElementById('login-link');
+
 
     // Helper function to display messages
     function displayMessage(msg, isError = false) {
@@ -48,14 +53,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const currentPath = window.location.pathname;
     const isLoginPage = currentPath.includes('login.html');
     const isSignupPage = currentPath.includes('signup.html');
+    const isVerifyPage = currentPath.includes('verify.html');
     const token = localStorage.getItem('access_token');
 
-    if (!token && !isLoginPage && !isSignupPage) {
+    if (!token && !isLoginPage && !isSignupPage && !isVerifyPage) {
         console.log("No authentication token found. Redirecting to login page.");
         window.location.href = 'login.html';
-    } else if (token && (isLoginPage || isSignupPage)) {
+    } else if (token && (isLoginPage || isSignupPage || isVerifyPage)) {
         console.log("Authentication token found. Redirecting from auth page to index.");
-        window.location.href = 'index.html';
+        // window.location.href = 'index.html'; // We will not redirect from verify page
     }
 
     // --- Signup Form Submission Handler ---
@@ -77,10 +83,8 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const data = await api.signup({ username, email, password });
                 displayMessage(data.message || 'Signup successful! Please check your email to verify your account.', false);
-
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 3000);
+                // Optionally hide the form and show the resend link section
+                signupForm.style.display = 'none';
 
             } catch (error) {
                 console.error('Signup error:', error);
@@ -133,13 +137,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- NEW: Resend Email Handlers ---
+    // --- Resend Email Handlers ---
     if (resendEmailToggle && resendSection && resendEmailButton) {
-        // Toggle the resend email form section
         resendEmailToggle.addEventListener('click', function(event) {
             event.preventDefault();
             resendSection.style.display = resendSection.style.display === 'none' ? 'block' : 'none';
-            // Pre-fill the email field if it exists on the page
             if (isLoginPage) {
                 resendEmailInput.value = loginEmailInput.value;
             } else if (isSignupPage) {
@@ -147,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Handle the resend button click
         resendEmailButton.addEventListener('click', async function() {
             const email = resendEmailInput.value.trim();
 
@@ -167,5 +168,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayResendMessage(errorMessage, true);
             }
         });
+    }
+
+    // --- NEW: Email Verification Handler (for verify.html) ---
+    if (isVerifyPage) {
+        async function verifyUser() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+
+            if (!token) {
+                verifyTitle.textContent = "Verification Failed";
+                verifyMessageDisplay.textContent = "No verification token found.";
+                verifyMessageDisplay.classList.add('error-message');
+                verifyMessageDisplay.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await api.verifyEmail(token);
+                verifyTitle.textContent = "Email Verified!";
+                verifyMessageDisplay.textContent = response.message || "Your email has been successfully verified. You can now log in.";
+                verifyMessageDisplay.classList.add('success-message');
+                verifyMessageDisplay.style.display = 'block';
+                loginLink.style.display = 'block'; // Show login link on success
+            } catch (error) {
+                verifyTitle.textContent = "Verification Failed";
+                const errorMessage = error.message || 'An error occurred during verification. The link may be invalid or expired.';
+                verifyMessageDisplay.textContent = errorMessage;
+                verifyMessageDisplay.classList.add('error-message');
+                verifyMessageDisplay.style.display = 'block';
+            }
+        }
+        verifyUser();
     }
 }); // End of DOMContentLoaded

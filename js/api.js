@@ -76,8 +76,9 @@ const api = {
     // Authentication
     signup: (userData) => apiRequest('/api/auth/signup', 'POST', userData, false),
     login: (credentials) => apiRequest('/api/auth/login', 'POST', credentials, false),
-    // NEW: Resend Verification Email
     resendVerificationEmail: (emailData) => apiRequest('/api/auth/resend-verification-email', 'POST', emailData, false),
+    // NEW: Email Verification
+    verifyEmail: (token) => apiRequest(`/api/auth/verify/${token}`, 'GET', null, false),
     
     logout: () => {
         localStorage.removeItem('access_token');
