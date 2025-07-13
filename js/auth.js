@@ -2,7 +2,6 @@
 // Assumes api.js is loaded first and defines the 'api' global object.
 
 document.addEventListener('DOMContentLoaded', function() {
-    // ... (Your existing element selections and checkAuthStatus function) ...
     const signupForm = document.getElementById('signup-form');
     const signupUsernameInput = document.getElementById('username');
     const signupEmailInput = document.getElementById('email');
@@ -15,20 +14,37 @@ document.addEventListener('DOMContentLoaded', function() {
     const authMessageDisplay = document.getElementById('auth-message');
     const logoutBtn = document.getElementById('logout-btn');
 
+    // NEW: Resend email elements
+    const resendEmailToggle = document.getElementById('resend-email-toggle');
+    const resendSection = document.getElementById('resend-section');
+    const resendEmailInput = document.getElementById('resend-email-input');
+    const resendEmailButton = document.getElementById('resend-email-button');
+    const resendMessageDisplay = document.getElementById('resend-message');
+
+
     // Helper function to display messages
     function displayMessage(msg, isError = false) {
-        if (authMessageDisplay) {
-            authMessageDisplay.textContent = msg;
-            authMessageDisplay.classList.remove('success-message', 'error-message');
-            authMessageDisplay.classList.add(isError ? 'error-message' : 'success-message');
-            authMessageDisplay.style.display = 'block'; // Ensure it's visible
-            // console.log(`Displaying message: "${msg}" (Error: ${isError})`); // <--- ADD THIS FOR DEBUGGING
+        const targetDisplay = isError ? authMessageDisplay : (resendMessageDisplay || authMessageDisplay);
+        if (targetDisplay) {
+            targetDisplay.textContent = msg;
+            targetDisplay.classList.remove('success-message', 'error-message');
+            targetDisplay.classList.add(isError ? 'error-message' : 'success-message');
+            targetDisplay.style.display = 'block';
         } else {
-            console.warn(`Message display element not found (ID: auth-message). Message: "${msg}" (Error: ${isError})`);
+            console.warn(`Message display element not found. Message: "${msg}" (Error: ${isError})`);
         }
     }
 
-    // ... (Your existing check Authentication Status on Load) ...
+    // New helper function for resend messages
+    function displayResendMessage(msg, isError = false) {
+        if (resendMessageDisplay) {
+            resendMessageDisplay.textContent = msg;
+            resendMessageDisplay.classList.remove('success-message', 'error-message');
+            resendMessageDisplay.classList.add(isError ? 'error-message' : 'success-message');
+            resendMessageDisplay.style.display = 'block';
+        }
+    }
+
     const currentPath = window.location.pathname;
     const isLoginPage = currentPath.includes('login.html');
     const isSignupPage = currentPath.includes('signup.html');
@@ -60,12 +76,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             try {
                 const data = await api.signup({ username, email, password });
-                displayMessage(data.message || 'Signup successful! Please check your email to verify your account.', false); // <--- IMPROVED MESSAGE
+                displayMessage(data.message || 'Signup successful! Please check your email to verify your account.', false);
 
-                // Redirect to login page after successful signup, giving time to read message
                 setTimeout(() => {
                     window.location.href = 'login.html';
-                }, 3000); // <--- INCREASED DELAY TO 3 SECONDS
+                }, 3000);
 
             } catch (error) {
                 console.error('Signup error:', error);
@@ -105,9 +120,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                // The API error object is already structured, display its message directly
                 const errorMessage = error.message || 'An unknown error occurred during login.';
-                displayMessage(errorMessage, true); // This will now show "Account not verified..."
+                displayMessage(errorMessage, true);
             }
         });
     }
@@ -116,6 +130,42 @@ document.addEventListener('DOMContentLoaded', function() {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function() {
             api.logout();
+        });
+    }
+
+    // --- NEW: Resend Email Handlers ---
+    if (resendEmailToggle && resendSection && resendEmailButton) {
+        // Toggle the resend email form section
+        resendEmailToggle.addEventListener('click', function(event) {
+            event.preventDefault();
+            resendSection.style.display = resendSection.style.display === 'none' ? 'block' : 'none';
+            // Pre-fill the email field if it exists on the page
+            if (isLoginPage) {
+                resendEmailInput.value = loginEmailInput.value;
+            } else if (isSignupPage) {
+                resendEmailInput.value = signupEmailInput.value;
+            }
+        });
+
+        // Handle the resend button click
+        resendEmailButton.addEventListener('click', async function() {
+            const email = resendEmailInput.value.trim();
+
+            if (!email) {
+                displayResendMessage('Please enter your email.', true);
+                return;
+            }
+
+            displayResendMessage('Resending email...', false);
+
+            try {
+                const data = await api.resendVerificationEmail({ email });
+                displayResendMessage(data.message || 'Verification email resent successfully!', false);
+            } catch (error) {
+                console.error('Resend email error:', error);
+                const errorMessage = error.message || 'An error occurred. Please try again.';
+                displayResendMessage(errorMessage, true);
+            }
         });
     }
 }); // End of DOMContentLoaded

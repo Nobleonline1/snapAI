@@ -74,28 +74,22 @@ async function apiRequest(endpoint, method = 'GET', data = null, needsAuth = tru
 // Define specific API methods for easier use
 const api = {
     // Authentication
-    signup: (userData) => apiRequest('/api/auth/signup', 'POST', userData, false), // No auth needed for signup
-    login: (credentials) => apiRequest('/api/auth/login', 'POST', credentials, false), // No auth needed for login
+    signup: (userData) => apiRequest('/api/auth/signup', 'POST', userData, false),
+    login: (credentials) => apiRequest('/api/auth/login', 'POST', credentials, false),
+    // NEW: Resend Verification Email
+    resendVerificationEmail: (emailData) => apiRequest('/api/auth/resend-verification-email', 'POST', emailData, false),
+    
     logout: () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
-        // Optionally make a backend logout request if your API has one
-        // apiRequest('/api/auth/logout', 'POST', null, true);
-        window.location.href = 'login.html'; // Redirect to login page
+        window.location.href = 'login.html';
     },
     // AI Comment Generation
-    generateComment: (imageData) => apiRequest('/api/ai/generate-comment', 'POST', imageData, true), // Requires auth
+    generateComment: (imageData) => apiRequest('/api/ai/generate-comment', 'POST', imageData, true),
     
     // User Management (example)
-    getUserProfile: () => apiRequest('/api/user/profile', 'GET', null, true), // Requires auth
-    updateUserProfile: (profileData) => apiRequest('/api/user/profile', 'PUT', profileData, true), // Requires auth
-
-    // Add more API calls as your application grows
-    // For example:
-    // getComments: (postId) => apiRequest(`/api/posts/${postId}/comments`, 'GET', null, true),
-    // postComment: (postId, commentData) => apiRequest(`/api/posts/${postId}/comments`, 'POST', commentData, true),
+    getUserProfile: () => apiRequest('/api/user/profile', 'GET', null, true),
+    updateUserProfile: (profileData) => apiRequest('/api/user/profile', 'PUT', profileData, true),
 };
 
-// Make the `api` object globally accessible (or import it if using modules)
-// For simple setups with direct script includes, attaching to window is common.
 window.api = api;
